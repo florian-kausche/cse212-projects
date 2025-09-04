@@ -28,7 +28,7 @@ public static class Arrays
     /// List<int>{7, 8, 9, 1, 2, 3, 4, 5, 6}.  The value of amount will be in the range of 1 to data.Count, inclusive.
     ///
     /// Because a list is dynamic, this function will modify the existing data list rather than returning a new list.
-    /// </summary>
+    
     public static void RotateListRight(List<int> data, int amount)
     {
       // Step 1: Calculate the effective rotation amount using modulo
