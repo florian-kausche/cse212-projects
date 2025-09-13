@@ -20,8 +20,7 @@ public class TakingTurnsQueue
     /// <param name="turns">Number of turns remaining</param>
     public void AddPerson(string name, int turns)
     {
-        var person = new Person(name, turns);
-        _people.Enqueue(person);
+        _people.Enqueue(new Person(name, turns));
     }
 
     /// <summary>
@@ -37,17 +36,22 @@ public class TakingTurnsQueue
         {
             throw new InvalidOperationException("No one in the queue.");
         }
-        else
-        {
-            Person person = _people.Dequeue();
-            if (person.Turns > 1)
-            {
-                person.Turns -= 1;
-                _people.Enqueue(person);
-            }
 
-            return person;
+        Person person = _people.Dequeue();
+
+        if (person.Turns > 0)
+        {
+            // Decrement turns and re-enqueue if turns remain
+            person.Turns -= 1;
+            _people.Enqueue(person);
         }
+        else if (person.Turns == 0 || person.Turns < 0)
+        {
+            // Infinite turns, re-enqueue without decrementing turns
+            _people.Enqueue(person);
+        }
+
+        return person;
     }
 
     public override string ToString()
