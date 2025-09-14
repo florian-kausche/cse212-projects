@@ -38,18 +38,19 @@ public class TakingTurnsQueue
         }
 
         Person person = _people.Dequeue();
+        var currentTurns = person.Turns;
 
-        if (person.Turns > 0)
+        // For infinite turns (0 or less) or remaining turns > 1, re-enqueue
+        if (currentTurns <= 0)
         {
-            // Decrement turns and re-enqueue if turns remain
-            person.Turns -= 1;
-            _people.Enqueue(person);
+            _people.Enqueue(person); // Re-enqueue without changing turns
         }
-        else if (person.Turns == 0 || person.Turns < 0)
+        else if (currentTurns > 1)
         {
-            // Infinite turns, re-enqueue without decrementing turns
-            _people.Enqueue(person);
+            person.Turns = currentTurns - 1; // Decrement turns
+            _people.Enqueue(person); // Put back in queue
         }
+        // If turns == 1, this is their last turn so they're not re-enqueued
 
         return person;
     }
